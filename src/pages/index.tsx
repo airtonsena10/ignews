@@ -1,8 +1,11 @@
+/* eslint-disable jsx-a11y/alt-text */
 import Head from 'next/head';
 import styles from './home.module.scss';
 // Importação de dentro do Next do tipo para a função getStaticProps!
 import { GetStaticProps } from 'next';
 import { SubscribeButton } from '../components/SubscribeButton';
+// Otimizando  imagens com next-imag
+import Image from 'next/image'
 
 // Importação do serviço que criamos do Stripe!
 import { stripe } from '../services/stripe';
@@ -38,7 +41,11 @@ export default function Home({product}:HomeProps) {
                     <SubscribeButton priceId={product.priceId}/>
                 
                     </section>
-                    <img src="/images/avatar.svg" alt="Girl coding" />
+                    <Image src="/images/avatar.svg"
+                     width={1000}
+                      height={1000}
+                    
+                    />
                     
         </main>
 
