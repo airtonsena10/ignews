@@ -4,8 +4,7 @@
   HTTP!
 */
 import Stripe from 'stripe'
-/* Importando o package.json para recupera a versão da aplicação a partir dele */
-import { version } from '../../package.json';
+
 
 // O construtor do Stripe onde recebe parâmetros!
 export const stripe = new Stripe(
@@ -24,13 +23,10 @@ export const stripe = new Stripe(
         Nome da aplicação! (Identifica qual aplicação está realizando as requisições a API)
       */
       name: 'NewsDev',
-      /*
-        Versão da aplicação. Podemos buscar dentro do próprio
-        package.json! Importando  o arquivo 
-      */
-      //version: '0.1.0' // Sem importar do package.json!
+     
+      version: '0.1.0' 
       
-      version // Importando do package.json!
+      
     }
   }
 )
