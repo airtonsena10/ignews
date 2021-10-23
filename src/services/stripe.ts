@@ -12,7 +12,7 @@ export const stripe = new Stripe(
     O primeiro dele é a chave secreta da API do Stripe. O valor que inserimos
     dentro de uma Variável Ambiente - no arquivo .env.local!
   */
-  process.env.STRIPE_API_KEY, // Acessandos as Variáveis Ambiente através do "process.env"!
+  process.env.STRIPE_API_KEY, // Acessando as Variáveis Ambiente através do "process.env"!
   
   {
     // versão da API!

@@ -4,6 +4,8 @@ import { SignInButton } from "../SignInButton";
 // Otimizando  imagens com next-imag
 import Image from 'next/image'
 
+import { ActiveLink } from '../ActiveLink';
+
 export function Header() {
   return (
     <header className={styles.headerContainer}>
@@ -13,10 +15,15 @@ export function Header() {
      width={100}
      height={100}
      />
-        <nav>
-          <a className={styles.active}>Home</a>
-          <a>Post</a>
-        </nav>
+         <nav>
+                    <ActiveLink activeClassName={styles.active}  href="/">
+                        <a>Home</a>
+                    </ActiveLink>
+                    <ActiveLink activeClassName={styles.active} href="/posts" prefetch>
+                        <a>Posts</a>
+                    </ActiveLink>
+                </nav>
+
         
         <SignInButton />
         </div>
