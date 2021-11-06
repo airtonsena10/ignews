@@ -20,14 +20,48 @@ export default NextAuth({
     // ...add more providers here
   ],
   callbacks: {
+    async session(session) {
+      try {
+        const userActiveSubscription = await fauna.query(
+          q.Get(
+            q.Intersection([
+              q.Match(
+                q.Index("subscription_by_user_ref"),
+                q.Select(
+                  "ref",
+                  q.Get(
+                    q.Match(
+                      q.Index("user_by_email"),
+                      q.Casefold(session.user.email)
+                    )
+                  )
+                )
+              ),
+              q.Match(q.Index("subscription_by_status"), "active"),
+            ])
+          )
+        );
+
+        return {
+          ...session,
+          activeSubscription: userActiveSubscription,
+        };
+      } catch {
+        return {
+          ...session,
+          activeSubscription: null,
+        };
+      }
+    },
+
     async signIn(user, account, profile) {
       const { email } = user;
 
       try {
         await fauna.query(
           q.If(
-            /* verificando se o usuário não existe. 
-            */
+            /* verificando se o usuário não existe.
+             */
             q.Not(
               q.Exists(
                 /*
@@ -35,11 +69,11 @@ export default NextAuth({
                 que está realizando a autenticação.
                 Utilizamos o método 'Match' do Fauna!
               */
-                q.Match(q.Index("user_by_email"), q.Casefold(user.email)),
-              ),
+                q.Match(q.Index("user_by_email"), q.Casefold(user.email))
+              )
             ),
             /* Create: método para fazer uma inserção no FaunaDB.
-                    */
+             */
             q.Create(q.Collection("users"), {
               data: { email } /* inserir apenas o email do usuário! */,
             }),
@@ -47,16 +81,16 @@ export default NextAuth({
               q.Match(
                 q.Index("user_by_email"),
 
-                q.Casefold(user.email),
-              ),
-            ),
+                q.Casefold(user.email)
+              )
+            )
             /*
                     Para evitar diferenciar o valor do filtro de busca entre
                     maiúscula e minúscula,utilizamos a função 'Casefold'.
                     Ela irá normalizar o case do email para ficar tudo lowercase!
                     (casefold)
                   */
-          ),
+          )
         );
 
         return true;

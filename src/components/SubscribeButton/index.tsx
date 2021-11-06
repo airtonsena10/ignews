@@ -1,5 +1,6 @@
 // Importando o signIn e o useSession de dentro do next-auth/client
 import { useSession, signIn } from "next-auth/client";
+import { useRouter } from "next/dist/client/router";
 import { api } from "../../services/api";
 import { getStripeJs } from "../../services/stripe-js";
 import styles from "./styles.module.scss";
@@ -10,6 +11,7 @@ interface SubscribeButtonProps {
 
 export function SubscribeButton({ priceId }: SubscribeButtonProps) {
   const [session] = useSession();
+  const router = useRouter();
   /*
     criando uma função que tratará da ação de inscrever o usuário
     para possibilitá-lo de acessar os conteúdos da aplicação!
@@ -21,8 +23,12 @@ export function SubscribeButton({ priceId }: SubscribeButtonProps) {
       Se o usuário não estiver logado a aplicação redirecionará ele para a
       autenticação com o github.      */
       signIn("github");
-      return;  // colocamos esse "return"para  informa que mais nenhum código deve ser
-              // executado, saindo da função.
+      return; // colocamos esse "return"para  informa que mais nenhum código deve ser
+      // executado, saindo da função.
+    }
+    if (session.activeSubscription) {
+      router.push("/posts");
+      return;
     }
 
     try {
